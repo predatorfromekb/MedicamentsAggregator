@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="search-result">{{title}}</div>
+    <li class="search-result">{{title}}</li>
 </template>
 
 <script>

@@ -1,11 +1,11 @@
 ﻿<template>
-    <div class="search-results">
+    <ul class="search-results">
         <SearchResult 
                 v-for="result in results" 
                 v-bind:key="result.DrugID" 
                 :title="result.DrugName" 
         />
-    </div>
+    </ul>
 </template>
 
 <script>

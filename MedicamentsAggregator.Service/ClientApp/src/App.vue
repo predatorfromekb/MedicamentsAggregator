@@ -27,4 +27,8 @@ export default {
   input {
     font-family: "Segoe UI",serif;
   }
+  ul {
+    margin: 0;
+    padding: 0;
+  }
 </style>
