@@ -17,18 +17,28 @@
                     :medicament="value"
             />
         </div>
+
+        <div class="vld-parent">
+            <VueLoading :active.sync="isLoading"
+                     :can-cancel="false"
+                     :is-full-page="true">
+            </VueLoading>
+        </div>
     </main>
     
 </template>
 
 <script>
+    import VueLoading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
     import Search from "./Search";
     import SelectedMedicament from "./SelectedMedicament";
     export default {
         name: "Facade",
-        components: {SelectedMedicament, Search},
+        components: {SelectedMedicament, Search, VueLoading},
         data: function () {
             return {
+                isLoading : false,
                 commonData: {
                     forceUpdate: this.$forceUpdate.bind(this),
                     selectedMedicaments: new Map()
@@ -37,7 +47,13 @@
         },
         methods: {
             sendMedicaments: function () {
-                console.log(Array.from(this.commonData.selectedMedicaments.values()));
+                const medicaments = Array.from(this.commonData.selectedMedicaments.values());
+                console.log(medicaments);
+                this.isLoading = true;
+                // simulate AJAX
+                setTimeout(() => {
+                    this.isLoading = false
+                },5000)
             }
         }
     }
