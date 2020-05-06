@@ -2,7 +2,7 @@
 
 namespace MedicamentsAggregator.Service.Models.Client
 {
-    public class ClientSearchModel
+    public class ClientAggregateModel
     {
         [JsonProperty("medicaments")]
         public ClientMedicamentModel[] Medicaments { get; set; }

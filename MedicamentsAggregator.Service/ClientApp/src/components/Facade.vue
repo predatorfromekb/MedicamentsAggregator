@@ -50,8 +50,7 @@
                 const medicaments = Array.from(this.commonData.selectedMedicaments.values());
                 console.log(medicaments);
                 this.isLoading = true;
-                // simulate AJAX
-                fetch('/api/search', {
+                fetch('/api/aggregate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

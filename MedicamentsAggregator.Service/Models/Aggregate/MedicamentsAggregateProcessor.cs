@@ -3,25 +3,25 @@ using System.Threading.Tasks;
 using MedicamentsAggregator.Service.Models.Client;
 using MedicamentsAggregator.Service.Models.Medgorodok;
 
-namespace MedicamentsAggregator.Service.Models.Search
+namespace MedicamentsAggregator.Service.Models.Aggregate
 {
-    public class MedicamentsSearchProcessor
+    public class MedicamentsAggregateProcessor
     {
         private readonly MedgorodokMedicamentPageParser _medgorodokMedicamentPageParser;
 
-        public MedicamentsSearchProcessor(
+        public MedicamentsAggregateProcessor(
             MedgorodokMedicamentPageParser medgorodokMedicamentPageParser
             )
         {
             _medgorodokMedicamentPageParser = medgorodokMedicamentPageParser;
         }
 
-        public async Task<MedicamentsSearchResultModel> Process(ClientSearchModel clientSearchModel)
+        public async Task<MedicamentsAggregateResultModel> Process(ClientAggregateModel clientAggregateModel)
         {
-            var listOfTasks = clientSearchModel.Medicaments
+            var listOfTasks = clientAggregateModel.Medicaments
                 .Select(medicament => _medgorodokMedicamentPageParser.Parse(medicament));
             var result = await Task.WhenAll(listOfTasks);
-            return  new MedicamentsSearchResultModel
+            return  new MedicamentsAggregateResultModel
             {
                 Count = result.Sum(e => e.Count)
             };

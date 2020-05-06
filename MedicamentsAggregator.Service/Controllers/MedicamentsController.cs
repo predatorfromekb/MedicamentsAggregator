@@ -1,7 +1,6 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using MedicamentsAggregator.Service.Models.Aggregate;
 using MedicamentsAggregator.Service.Models.Client;
-using MedicamentsAggregator.Service.Models.Search;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicamentsAggregator.Service.Controllers
@@ -10,17 +9,17 @@ namespace MedicamentsAggregator.Service.Controllers
     [Route("api")]
     public class MedicamentsController : ControllerBase
     {
-        private readonly MedicamentsSearchProcessor _medicamentsSearchProcessor;
+        private readonly MedicamentsAggregateProcessor _medicamentsAggregateProcessor;
 
-        public MedicamentsController(MedicamentsSearchProcessor medicamentsSearchProcessor)
+        public MedicamentsController(MedicamentsAggregateProcessor medicamentsAggregateProcessor)
         {
-            _medicamentsSearchProcessor = medicamentsSearchProcessor;
+            _medicamentsAggregateProcessor = medicamentsAggregateProcessor;
         }
 
-        [HttpPost("search")]
-        public async Task<ActionResult<ClientSearchModel>> Search(ClientSearchModel model)
+        [HttpPost("aggregate")]
+        public async Task<ActionResult<ClientAggregateModel>> Aggregate(ClientAggregateModel model)
         {
-            var result = await _medicamentsSearchProcessor.Process(model);
+            var result = await _medicamentsAggregateProcessor.Process(model);
             return Ok(result);
         }
     }

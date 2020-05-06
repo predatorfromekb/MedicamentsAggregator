@@ -1,9 +1,7 @@
+using MedicamentsAggregator.Service.Models.Aggregate;
 using MedicamentsAggregator.Service.Models.Medgorodok;
-using MedicamentsAggregator.Service.Models.Search;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,7 +26,7 @@ namespace MedicamentsAggregator.Service
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
-            services.AddScoped<MedicamentsSearchProcessor>();
+            services.AddScoped<MedicamentsAggregateProcessor>();
             services.AddScoped<MedgorodokMedicamentPageParser>();
         }
 
