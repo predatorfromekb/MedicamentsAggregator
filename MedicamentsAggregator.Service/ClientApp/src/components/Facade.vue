@@ -51,9 +51,14 @@
                 console.log(medicaments);
                 this.isLoading = true;
                 // simulate AJAX
-                setTimeout(() => {
-                    this.isLoading = false
-                },5000)
+                fetch('/api/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({medicaments: medicaments})
+                })
+                    .then(() => this.isLoading = false);
             }
         }
     }
