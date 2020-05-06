@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using MedicamentsAggregator.Service.Models;
+using MedicamentsAggregator.Service.Models.Client;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicamentsAggregator.Service.Controllers
@@ -9,7 +9,7 @@ namespace MedicamentsAggregator.Service.Controllers
     public class MedicamentsController : ControllerBase
     {
         [HttpPost("search")]
-        public ActionResult<SearchModel> Search(SearchModel model)
+        public ActionResult<ClientSearchModel> Search(ClientSearchModel model)
         {
             Thread.Sleep(7000);
             return Ok(model.Medicaments.Length);
