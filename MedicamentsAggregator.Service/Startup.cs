@@ -1,3 +1,5 @@
+using MedicamentsAggregator.Service.Models.Medgorodok;
+using MedicamentsAggregator.Service.Models.Search;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +27,9 @@ namespace MedicamentsAggregator.Service
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+
+            services.AddScoped<MedicamentsSearchProcessor>();
+            services.AddScoped<MedgorodokMedicamentPageParser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
