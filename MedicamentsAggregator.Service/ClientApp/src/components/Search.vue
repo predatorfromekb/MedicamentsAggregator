@@ -10,15 +10,22 @@
                     v-on:keyup="getSearchResults"
             />
         </div>
-        <SearchResults v-bind:results="results"/>
+        <SearchResultList v-if="query"
+                v-bind:results="results" 
+                v-bind:commonData="commonData"
+                v-bind:clearInput="clearInput.bind(this)" />
     </div>
 </template>
 
 <script>
-    import SearchResults from "./SearchResults";
+    import SearchResultList from "./SearchResultList";
+    
     export default {
         name: "Search",
-        components: {SearchResults},
+        components: {SearchResultList},
+        props: {
+            commonData: Object
+        },
         data: function () {
             return {
                 query: '',
@@ -29,7 +36,7 @@
         methods: {
             getSearchResults: function() {
                 const query = this.query.toLowerCase();
-                if (query.length < 4) {
+                if (query.length < 5) {
                     this.results = [];
                     return;
                 }
@@ -49,6 +56,9 @@
                         this.cache.set(query, e);
                         this.results = e;
                     });
+            },
+            clearInput: function () {
+                this.query = '';
             }
         }
     }
@@ -64,7 +74,7 @@
         height: 50px;
         border: 2px solid #ececec;
         box-shadow: 0 0 30px rgba(0,0,0,.1);
-        outline: none;
+        
         width: 100%;
         flex-grow: 1;
     }

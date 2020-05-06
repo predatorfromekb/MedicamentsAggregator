@@ -26,9 +26,18 @@ export default {
   }
   input {
     font-family: "Segoe UI",serif;
+    outline: none;
   }
-  ul {
+  ul, button, div, span, input {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 </style>

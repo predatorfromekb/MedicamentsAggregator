@@ -1,12 +1,32 @@
 ﻿<template>
-    <li class="search-result">{{title}}</li>
+    <li class="search-result" v-on:click="onResultClick">{{title}}</li>
 </template>
 
 <script>
     export default {
         name: "SearchResult",
         props: {
-            title: String
+            title: String,
+            url: String,
+            id: String,
+            commonData: Object,
+            clearInput: Function
+        },
+        methods: {
+            onResultClick: function () {
+                const id = parseInt(this.id);
+                if (!this.commonData.selectedMedicaments.has(id)){
+                    this.commonData.selectedMedicaments.set(id, {
+                        id: id,
+                        count: 1,
+                        title: this.title,
+                        url: this.url,
+                        
+                    });
+                    this.commonData.forceUpdate();
+                    this.clearInput();
+                }
+            }
         }
     }
 </script>
