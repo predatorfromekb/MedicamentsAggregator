@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Threading.Tasks;
 using MedicamentsAggregator.Service.Models.Client;
 using MedicamentsAggregator.Service.Models.Search;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,10 @@ namespace MedicamentsAggregator.Service.Controllers
         }
 
         [HttpPost("search")]
-        public ActionResult<ClientSearchModel> Search(ClientSearchModel model)
+        public async Task<ActionResult<ClientSearchModel>> Search(ClientSearchModel model)
         {
-            _medicamentsSearchProcessor.Process(model);
-            return Ok(model);
+            var result = await _medicamentsSearchProcessor.Process(model);
+            return Ok(result);
         }
     }
 }

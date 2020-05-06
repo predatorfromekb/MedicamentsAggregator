@@ -2,6 +2,6 @@
 {
     public class MedicamentsSearchResultModel
     {
-        
+        public int Count { get; set; }
     }
 }

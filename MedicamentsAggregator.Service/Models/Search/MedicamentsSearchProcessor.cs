@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using MedicamentsAggregator.Service.Models.Client;
 using MedicamentsAggregator.Service.Models.Medgorodok;
 
@@ -8,19 +9,22 @@ namespace MedicamentsAggregator.Service.Models.Search
     {
         private readonly MedgorodokMedicamentPageParser _medgorodokMedicamentPageParser;
 
-        public MedicamentsSearchProcessor(MedgorodokMedicamentPageParser medgorodokMedicamentPageParser)
+        public MedicamentsSearchProcessor(
+            MedgorodokMedicamentPageParser medgorodokMedicamentPageParser
+            )
         {
             _medgorodokMedicamentPageParser = medgorodokMedicamentPageParser;
         }
 
-        public MedicamentsSearchResultModel Process(ClientSearchModel clientSearchModel)
+        public async Task<MedicamentsSearchResultModel> Process(ClientSearchModel clientSearchModel)
         {
-            var list = new List<MedgorodokMedicamentModel>();
-            foreach (var medicament in clientSearchModel.Medicaments)
+            var listOfTasks = clientSearchModel.Medicaments
+                .Select(medicament => _medgorodokMedicamentPageParser.Parse(medicament));
+            var result = await Task.WhenAll(listOfTasks);
+            return  new MedicamentsSearchResultModel
             {
-                list.Add(_medgorodokMedicamentPageParser.Parse(medicament));
-            }
-            return new MedicamentsSearchResultModel();
+                Count = result.Sum(e => e.Count)
+            };
         }
     }
 }

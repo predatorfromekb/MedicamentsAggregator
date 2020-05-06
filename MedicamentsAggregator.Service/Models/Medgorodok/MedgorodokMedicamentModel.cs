@@ -2,6 +2,6 @@
 {
     public class MedgorodokMedicamentModel
     {
-        
+        public int Count { get; set; }
     }
 }
