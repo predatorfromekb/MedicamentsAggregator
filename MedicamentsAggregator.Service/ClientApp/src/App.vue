@@ -33,11 +33,7 @@ export default {
     padding: 0;
     box-sizing: border-box;
   }
-  input[type=number] {
-    -moz-appearance: textfield;
-  }
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  button:not(:disabled) {
+    cursor: pointer;
   }
 </style>

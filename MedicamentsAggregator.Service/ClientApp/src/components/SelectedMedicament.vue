@@ -1,10 +1,12 @@
 ﻿<template>
     <section class="selected-medicament">
         <span class="selected-medicament__title">{{medicament.title}}</span>
-        <div class="selected-medicament__buttons">
-            <button class="selected-medicament__remove">➕</button>
-            <button class="selected-medicament__remove">➖</button>
-            <span class="selected-medicament__count">{{medicament.count}}</span>
+        <div class="selected-medicament__button-list">
+            <button v-on:click="incrementCount" v-if="count < 9">➕</button>
+            <button v-on:click="incrementCount" v-else disabled>➕</button>
+            <button v-on:click="decrementCount" v-if="count > 1">➖</button>
+            <button v-on:click="decrementCount" v-else disabled>➖</button>
+            <span class="selected-medicament__count">{{count}}</span>
         </div>
     </section>
 </template>
@@ -14,6 +16,21 @@
         name: "SelectedMedicament",
         props: {
             medicament: Object
+        },
+        data : function () {
+            return {
+                count: this.medicament.count
+            }
+        },
+        methods: {
+            incrementCount : function () {
+                this.count ++; /* Для локальной отрисовки */
+                this.medicament.count ++; /* Для реального изменения количества */
+            },
+            decrementCount : function () {
+                this.count --; /* Для локальной отрисовки */
+                this.medicament.count --; /* Для реального изменения количества */
+            }
         }
     }
 </script>
@@ -36,13 +53,14 @@
 
     .selected-medicament__count {
         text-align: center;
-        border: 1px solid #777;
+        border: 1px solid #cccccc;
         grid-column: span 1;
         width: 100%;
         -webkit-appearance: none;
+        background-color: #eeeeee;
     }
 
-    .selected-medicament__buttons {
+    .selected-medicament__button-list {
         grid-column: span 1;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
