@@ -8,24 +8,28 @@ using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using MedicamentsAggregator.Service.Models.Client;
 using MedicamentsAggregator.Service.Models.Helpers;
+using MedicamentsAggregator.Service.Models.Logs;
+using Vostok.Logging.Abstractions;
 
 namespace MedicamentsAggregator.Service.Models.Medgorodok
 {
     public class MedgorodokMedicamentPageParser
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly MedgorodokLog _log;
         private static readonly Regex PharmacyIdRegex = new Regex(".+-(\\d+)\\.html", RegexOptions.Compiled);
+        private const string MedgorodokBaseUrl = "https://www.medgorodok.ru";
 
-        public MedgorodokMedicamentPageParser(IHttpClientFactory httpClientFactory)
+        public MedgorodokMedicamentPageParser(IHttpClientFactory httpClientFactory, MedgorodokLog log)
         {
             _httpClientFactory = httpClientFactory;
+            _log = log;
         }
 
-        private const string MedgorodokBaseUrl = "https://www.medgorodok.ru";
         public async Task<MedgorodokMedicamentModel> Parse(ClientMedicamentModel clientMedicamentModel)
         {
             var html = await GetMedgorodokMedicamentPageHtml(clientMedicamentModel.Url);
-            
+
             var parser  = new HtmlParser();
             var document = parser.ParseDocument(html);
 
@@ -63,7 +67,7 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
                 }
                 catch (NullReturnException ex)
                 {
-                    //LOG;
+                    _log.Error(ex);
                     return null;
                 }
             });
@@ -81,8 +85,7 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
 
             if (titleA == null)
             {
-                //LOG
-                throw new NullReturnException();
+                throw new NullReturnException($"titleA is null: {pharmacyElement}");
             }
 
             var title = titleA.InnerHtml.Trim();
@@ -90,16 +93,14 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
             var href = titleA.GetAttribute("href");
             if (href == null)
             {
-                //LOG
-                throw new NullReturnException();
+                throw new NullReturnException($"href is null: {pharmacyElement}");
             }
                 
             var idIsParsed = int.TryParse(PharmacyIdRegex.Match(href).Groups[1].Value, out var id);
                 
             if (!idIsParsed)
             {
-                //LOG
-                throw new NullReturnException();
+                throw new NullReturnException($"id cannot be parsed: {pharmacyElement}");
             }
 
             return (id, title);
@@ -133,8 +134,7 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
 
             if (!priceIsParsed)
             {
-                //LOG
-                throw new NullReturnException();
+                throw new NullReturnException($"price cannot be parsed: {pharmacyElement}");
             }
 
             return Math.Round(price, 1, MidpointRounding.AwayFromZero);

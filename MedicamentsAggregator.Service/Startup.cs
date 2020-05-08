@@ -1,11 +1,17 @@
 using System.Net.Http;
 using MedicamentsAggregator.Service.Models.Aggregate;
+using MedicamentsAggregator.Service.Models.Helpers;
+using MedicamentsAggregator.Service.Models.Logs;
 using MedicamentsAggregator.Service.Models.Medgorodok;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Vostok.Logging.File;
+using Vostok.Logging.File.Configuration;
+using Vostok.Logging.Microsoft;
 using VueCliMiddleware;
 
 namespace MedicamentsAggregator.Service
@@ -29,11 +35,13 @@ namespace MedicamentsAggregator.Service
             services.AddHttpClient();
             services.AddScoped<MedicamentsAggregateProcessor>();
             services.AddScoped<MedgorodokMedicamentPageParser>();
+            services.AddSingleton<MedgorodokLog>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddVostok(new ApplicationLog());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
