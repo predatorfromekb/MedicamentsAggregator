@@ -2,6 +2,12 @@
 {
     public class MedgorodokMedicamentModel
     {
-        public int Count { get; set; }
+        public MedgorodokMedicamentModel(MedgorodokPharmacyModel[] pharmacies)
+        {
+            Pharmacies = pharmacies;
+        }
+
+        public MedgorodokPharmacyModel[] Pharmacies { get; }
+        public int Count => Pharmacies.Length;
     }
 }

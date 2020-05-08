@@ -23,7 +23,7 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             var result = await Task.WhenAll(listOfTasks);
             return  new MedicamentsAggregateResultModel
             {
-                Count = result.Sum(e => e.Count)
+                Count = result.Sum(e => e.Count),
             };
         }
     }
