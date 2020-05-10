@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
-using MedicamentsAggregator.Service.Models.Client;
+using MedicamentsAggregator.Service.DataLayer.Tables;
 using MedicamentsAggregator.Service.Models.Helpers;
 using MedicamentsAggregator.Service.Models.Logs;
 using Vostok.Logging.Abstractions;
@@ -26,9 +26,9 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
             _log = log;
         }
 
-        public async Task<MedgorodokMedicamentModel> Parse(ClientMedicamentModel clientMedicamentModel)
+        public async Task<MedgorodokMedicamentModel> Parse(Medicament medicament)
         {
-            var html = await GetMedgorodokMedicamentPageHtml(clientMedicamentModel.Url);
+            var html = await GetMedgorodokMedicamentPageHtml(medicament.Url);
 
             var parser  = new HtmlParser();
             var document = parser.ParseDocument(html);
@@ -42,7 +42,7 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
                 .Where(e => e != null)
                 .ToArray();
 
-            return new MedgorodokMedicamentModel(pharmacies);
+            return new MedgorodokMedicamentModel(pharmacies, medicament);
 
         }
 

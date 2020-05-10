@@ -1,16 +1,15 @@
-using System.Net.Http;
+using MedicamentsAggregator.Service.DataLayer;
 using MedicamentsAggregator.Service.Models.Aggregate;
-using MedicamentsAggregator.Service.Models.Helpers;
+using MedicamentsAggregator.Service.Models.Common;
 using MedicamentsAggregator.Service.Models.Logs;
 using MedicamentsAggregator.Service.Models.Medgorodok;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Vostok.Logging.File;
-using Vostok.Logging.File.Configuration;
 using Vostok.Logging.Microsoft;
 using VueCliMiddleware;
 
@@ -33,14 +32,23 @@ namespace MedicamentsAggregator.Service
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
             services.AddHttpClient();
+            services.AddDbContext<MedicamentsAggregatorContext>(options =>
+                options
+                    .UseNpgsql(Configuration.GetConnectionString("MedicamentsAggregator"))
+                    .UseLoggerFactory(EntityFrameworkLoggerFactory.Singleton));
+            services.AddSingleton<MedicamentsAggregatorContextFactory>();
+            services.AddSingleton<Repository>();
+            
             services.AddScoped<MedicamentsAggregateProcessor>();
             services.AddScoped<MedgorodokMedicamentPageParser>();
             services.AddSingleton<MedgorodokLog>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            //ConnectionString.MedicamentsAggregator = Configuration.GetConnectionString("MedicamentsAggregator");
             loggerFactory.AddVostok(new ApplicationLog());
             if (env.IsDevelopment())
             {
