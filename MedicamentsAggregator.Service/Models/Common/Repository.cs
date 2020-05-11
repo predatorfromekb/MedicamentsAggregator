@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MedicamentsAggregator.Service.DataLayer;
 
 namespace MedicamentsAggregator.Service.Models.Common
@@ -13,19 +14,21 @@ namespace MedicamentsAggregator.Service.Models.Common
             _medicamentsAggregatorContextFactory = medicamentsAggregatorContextFactory;
         }
 
-        public EntityContainer<T> AddOrUpdate<T>(T[] entities, Action<T,T> update) where T : class, IFixedIdEntity
+        public async Task<EntityContainer<T>> AddOrUpdate<T>(T[] entities, Action<T,T> update) where T : class, IFixedIdEntity
         {
             using (var context = _medicamentsAggregatorContextFactory.CreateContext())
             {
                 var entitiesFromDatabase = GetEntitiesFromDatabase(entities, context);
                 
                 var entitiesToInsert = GetEntitiesToInsert(entities, entitiesFromDatabase);
-                context.AddRange(entitiesToInsert);
+                var insertTask = context.AddRangeAsync(entitiesToInsert);
                 
                 var entitiesToUpdateFromDb = GetEntitiesToUpdate(entities, entitiesFromDatabase, update);
                 context.UpdateRange(entitiesToUpdateFromDb);
+
+                await insertTask;
                 
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return new EntityContainer<T>
                 {
                     InsertedEntities = entitiesToInsert,
@@ -59,7 +62,7 @@ namespace MedicamentsAggregator.Service.Models.Common
         private T[] GetEntitiesToUpdate<T>(T[] entities, T[] entitiesFromDatabase, Action<T,T> update) where T : class, IFixedIdEntity
         {
             var now = DateTime.Now;
-            var dayBefore = DateTime.Now.AddDays(-1);
+            var dayBefore = DateTime.Now.AddSeconds(-1);
             
             var obsoleteEntitiesFromDatabase = entitiesFromDatabase
                 .Where(e => e.UpdatedDate <= dayBefore)

@@ -41,7 +41,7 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             var medicaments = medicamentsFromClient
                 .Select(e => e.ToMedicament())
                 .ToArray();
-            var entities  = _repository
+            var entities  = await _repository
                 .AddOrUpdate(medicaments,UpdatingRules.ForMedicament);
             
             var listOfTasks = entities.AllEntities
@@ -49,7 +49,7 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             
             var parsingResult = await Task.WhenAll(listOfTasks);
             
-            UpdatePharmacies(parsingResult);
+            await UpdatePharmacies(parsingResult);
             await UpdateLinks(parsingResult);
 
             return  new MedicamentsAggregateResultModel
@@ -58,15 +58,23 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             };
         }
 
-        private void UpdatePharmacies(MedgorodokMedicamentModel[] models)
+        private async Task UpdatePharmacies(MedgorodokMedicamentModel[] models)
         {
-            foreach (var model in models)
-            {
-                var pharmacies = model.Pharmacies
-                    .Select(e => e.ToPharmacy())
-                    .ToArray();
-                _repository.AddOrUpdate(pharmacies, UpdatingRules.ForPharmacy);
-            }
+            var pharmacies = UnionPharmacies(models);
+            await _repository.AddOrUpdate(pharmacies, UpdatingRules.ForPharmacy);
+        }
+
+        private Pharmacy[] UnionPharmacies(MedgorodokMedicamentModel[] models)
+        {
+            return models
+                .Aggregate(
+                    Enumerable.Empty<Pharmacy>(), 
+                    (list, model) => list
+                        .Union<Pharmacy>(
+                            model.Pharmacies.Select(e => e.ToPharmacy()),
+                            EntityEqualityComparer.Instance)
+                    )
+                .ToArray();
         }
         
         private async Task UpdateLinks(MedgorodokMedicamentModel[] models)
@@ -93,8 +101,10 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             {
                 var currentMedicamentLinks = context.Set<PharmacyMedicamentLink>()
                     .Where(e => e.MedicamentId == medicamentId);
+
+                var addTask = context.AddRangeAsync(links);
                 context.RemoveRange(currentMedicamentLinks);
-                context.AddRange(links);
+                await addTask;
                 await context.SaveChangesAsync();
             }
 
