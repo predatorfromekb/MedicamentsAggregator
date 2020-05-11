@@ -50,7 +50,7 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             var parsingResult = await Task.WhenAll(listOfTasks);
             
             UpdatePharmacies(parsingResult);
-            UpdateLinks(parsingResult);
+            await UpdateLinks(parsingResult);
 
             return  new MedicamentsAggregateResultModel
             {
@@ -69,15 +69,13 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             }
         }
         
-        private void UpdateLinks(MedgorodokMedicamentModel[] models)
+        private async Task UpdateLinks(MedgorodokMedicamentModel[] models)
         {
-            foreach (var model in models)
-            {
-                AddItemToDatabase(model);
-            }
+            var tasks = models.Select(UpdateLinkOfOneMedicament);
+            await Task.WhenAll(tasks);
         }
         
-        private void AddItemToDatabase(MedgorodokMedicamentModel model)
+        private async Task UpdateLinkOfOneMedicament(MedgorodokMedicamentModel model)
         {
             var now = DateTime.Now;
             
@@ -97,7 +95,7 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
                     .Where(e => e.MedicamentId == medicamentId);
                 context.RemoveRange(currentMedicamentLinks);
                 context.AddRange(links);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
         }
