@@ -62,7 +62,7 @@ namespace MedicamentsAggregator.Service.Models.Common
         private T[] GetEntitiesToUpdate<T>(T[] entities, T[] entitiesFromDatabase, Action<T,T> update) where T : class, IFixedIdEntity
         {
             var now = DateTime.Now;
-            var dayBefore = DateTime.Now.AddSeconds(-1);
+            var dayBefore = DateTime.Now.AddDays(-1);
             
             var obsoleteEntitiesFromDatabase = entitiesFromDatabase
                 .Where(e => e.UpdatedDate <= dayBefore)
