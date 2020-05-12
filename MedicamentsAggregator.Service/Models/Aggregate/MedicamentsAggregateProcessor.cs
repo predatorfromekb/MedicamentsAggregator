@@ -5,6 +5,7 @@ using MedicamentsAggregator.Service.DataLayer;
 using MedicamentsAggregator.Service.DataLayer.Tables;
 using MedicamentsAggregator.Service.Models.Client;
 using MedicamentsAggregator.Service.Models.Common;
+using MedicamentsAggregator.Service.Models.GeoCoder;
 using MedicamentsAggregator.Service.Models.Medgorodok;
 
 namespace MedicamentsAggregator.Service.Models.Aggregate
@@ -14,16 +15,19 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
         private readonly MedgorodokMedicamentPageParser _medgorodokMedicamentPageParser;
         private readonly MedicamentsAggregatorContextFactory _medicamentsAggregatorContextFactory;
         private readonly Repository _repository;
+        private readonly PharmacyCoordinatesUpdater _pharmacyCoordinatesUpdater;
 
         public MedicamentsAggregateProcessor(
             MedgorodokMedicamentPageParser medgorodokMedicamentPageParser,
             MedicamentsAggregatorContextFactory medicamentsAggregatorContextFactory,
-            Repository repository
+            Repository repository,
+            PharmacyCoordinatesUpdater pharmacyCoordinatesUpdater
         )
         {
             _medgorodokMedicamentPageParser = medgorodokMedicamentPageParser;
             _medicamentsAggregatorContextFactory = medicamentsAggregatorContextFactory;
             _repository = repository;
+            _pharmacyCoordinatesUpdater = pharmacyCoordinatesUpdater;
         }
 
         public async Task<MedicamentsAggregateResultModel> Process(ClientAggregateModel clientAggregateModel)
@@ -49,8 +53,12 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             
             var parsingResult = await Task.WhenAll(listOfTasks);
             
-            await UpdatePharmacies(parsingResult);
+            var pharmacies = await UpdatePharmacies(parsingResult);
             await UpdateLinks(parsingResult);
+            
+            var insertedPharmacies = pharmacies.InsertedEntities;
+
+            await _pharmacyCoordinatesUpdater.UpdateCoordinates(insertedPharmacies);
 
             return  new MedicamentsAggregateResultModel
             {
@@ -58,10 +66,10 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
             };
         }
 
-        private async Task UpdatePharmacies(MedgorodokMedicamentModel[] models)
+        private async Task<EntityContainer<Pharmacy>> UpdatePharmacies(MedgorodokMedicamentModel[] models)
         {
             var pharmacies = UnionPharmacies(models);
-            await _repository.AddOrUpdate(pharmacies, UpdatingRules.ForPharmacy);
+            return await _repository.AddOrUpdate(pharmacies, UpdatingRules.ForPharmacy);
         }
 
         private Pharmacy[] UnionPharmacies(MedgorodokMedicamentModel[] models)

@@ -18,6 +18,13 @@ namespace MedicamentsAggregator.Service.DataLayer.Tables
         [NotNull]
         [StringLength(255)]
         public string Address { get; set; }
+        
+        [NotNull]
+        [StringLength(255)]
+        public string City { get; set; }
+        
+        [StringLength(255)]
+        public string FormattedAddress { get; set; }
 
         public double? Latitude { get; set; }
         

@@ -10,7 +10,8 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
             {
                 Address = model.Address,
                 Id = model.Id,
-                Title = model.Title
+                Title = model.Title,
+                City = model.City
             };
         }
     }

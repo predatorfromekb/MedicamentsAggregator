@@ -1,6 +1,7 @@
 using MedicamentsAggregator.Service.DataLayer;
 using MedicamentsAggregator.Service.Models.Aggregate;
 using MedicamentsAggregator.Service.Models.Common;
+using MedicamentsAggregator.Service.Models.GeoCoder;
 using MedicamentsAggregator.Service.Models.Logs;
 using MedicamentsAggregator.Service.Models.Medgorodok;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,8 @@ namespace MedicamentsAggregator.Service
             services.AddScoped<MedicamentsAggregateProcessor>();
             services.AddScoped<MedgorodokMedicamentPageParser>();
             services.AddSingleton<MedgorodokLog>();
+            services.AddSingleton<GeoCoderLog>();
+            services.AddScoped<PharmacyCoordinatesUpdater>();
             
         }
 

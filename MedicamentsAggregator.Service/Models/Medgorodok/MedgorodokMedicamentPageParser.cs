@@ -19,6 +19,7 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
         private readonly MedgorodokLog _log;
         private static readonly Regex PharmacyIdRegex = new Regex(".+-(\\d+)\\.html", RegexOptions.Compiled);
         private const string MedgorodokBaseUrl = "https://www.medgorodok.ru";
+        private const string Yekaterinburg = "Екатеринбург";
 
         public MedgorodokMedicamentPageParser(IHttpClientFactory httpClientFactory, MedgorodokLog log)
         {
@@ -33,9 +34,19 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
             var parser  = new HtmlParser();
             var document = parser.ParseDocument(html);
 
+            var city = document
+                           .QuerySelector(".apothecas-addresses-title")?
+                           .InnerHtml
+                           .Replace("Адреса аптек в г. ", "");
+
+            if (city == null)
+            {
+                _log.Warn($"city is null: medicament - {medicament.Id}");
+            }
+
             var tasks = document
                 .QuerySelectorAll(".apothecas-addresses-list-item")
-                .Select(ParsePharmacy);
+                .Select(e => ParsePharmacy(e, city));
 
             var pharmacies = (await Task
                 .WhenAll(tasks))
@@ -54,7 +65,7 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
             return await response.Content.ReadAsStringAsync();
         }
 
-        private async Task<MedgorodokPharmacyModel> ParsePharmacy(IElement pharmacyElement)
+        private async Task<MedgorodokPharmacyModel> ParsePharmacy(IElement pharmacyElement, string city)
         {
             return await Task.Run(() =>
             {
@@ -63,7 +74,7 @@ namespace MedicamentsAggregator.Service.Models.Medgorodok
                     var (id, title) = ParseTitleAndId(pharmacyElement);
                     var address = ParseAddress(pharmacyElement);
                     var price = ParsePrice(pharmacyElement);
-                    return new MedgorodokPharmacyModel(id, title, address, price);
+                    return new MedgorodokPharmacyModel(id, title, address, price, city);
                 }
                 catch (NullReturnException ex)
                 {

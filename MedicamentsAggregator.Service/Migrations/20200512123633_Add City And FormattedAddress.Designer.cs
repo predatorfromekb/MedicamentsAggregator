@@ -3,15 +3,17 @@ using System;
 using MedicamentsAggregator.Service.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MedicamentsAggregator.Service.Migrations
 {
     [DbContext(typeof(MedicamentsAggregatorContext))]
-    partial class MedicamentsAggregatorContextModelSnapshot : ModelSnapshot
+    [Migration("20200512123633_Add City And FormattedAddress")]
+    partial class AddCityAndFormattedAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
