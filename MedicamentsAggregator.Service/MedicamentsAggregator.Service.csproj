@@ -25,7 +25,9 @@
     <ItemGroup>
         <!-- Don't publish the SPA source files, but do show them in the project files list -->
         <Content Remove="$(SpaRoot)**" />
+        <Content Include="ClientApp\src\components\ButtonAsText.vue" />
         <Content Include="ClientApp\src\components\SelectedMedicament.vue" />
+        <Content Include="ClientApp\src\components\Settings.vue" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     </ItemGroup>

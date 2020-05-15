@@ -34,6 +34,7 @@
         position: absolute;
         width: 600px;
         background-color: white;
+        z-index: 15001;
     }
     @media screen and (max-width: 600px) {
         .search-results {

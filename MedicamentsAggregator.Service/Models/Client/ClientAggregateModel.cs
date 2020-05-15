@@ -6,5 +6,7 @@ namespace MedicamentsAggregator.Service.Models.Client
     {
         [JsonProperty("medicaments")]
         public ClientMedicamentModel[] Medicaments { get; set; }
+        [JsonProperty("settings")]
+        public AggregateSettings Settings { get; set; }
     }
 }

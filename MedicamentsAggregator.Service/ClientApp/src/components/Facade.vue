@@ -5,8 +5,9 @@
         </section>
         
         <div class="controls">
-            <div class="settings"></div>
-            <button class="search-btn" v-on:click="sendMedicaments">Искать</button>
+            <Settings v-bind:settings="settings"/>
+            
+            <button class="search-btn" v-on:click="sendMedicaments" :disabled="commonData.selectedMedicaments.size === 0">Искать</button>
         </div>
         
 
@@ -31,17 +32,26 @@
 <script>
     import VueLoading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/vue-loading.css';
+    import Settings from './Settings';
     import Search from "./Search";
     import SelectedMedicament from "./SelectedMedicament";
+    
+    
     export default {
         name: "Facade",
-        components: {SelectedMedicament, Search, VueLoading},
+        components: {SelectedMedicament, Search, Settings, VueLoading },
         data: function () {
             return {
                 isLoading : false,
                 commonData: {
                     forceUpdate: this.$forceUpdate.bind(this),
                     selectedMedicaments: new Map()
+                },
+                settings: {
+                    searchRadius : 1000,
+                    useSearchRadius : false,
+                    pharmaciesCount : 3,
+                    customPharmaciesCount: false
                 }
             }
         },
@@ -55,7 +65,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({medicaments: medicaments})
+                    body: JSON.stringify({medicaments: medicaments, settings: this.settings})
                 })
                     .then(() => this.isLoading = false);
             }
@@ -82,13 +92,11 @@
     .controls {
         grid-row: 2/3;
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: 5fr 1fr;
     }
-    .settings {
-        grid-column: 1/6;
-    }
+    
     .search-btn {
-        grid-column: 6/7;
+        grid-column: 2/3;
         width: 100%;
         height: 100%;
     }
