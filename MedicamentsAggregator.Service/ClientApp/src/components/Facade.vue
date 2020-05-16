@@ -51,7 +51,9 @@
                     searchRadius : 1000,
                     useSearchRadius : false,
                     pharmaciesCount : 3,
-                    customPharmaciesCount: false
+                    customPharmaciesCount: false,
+                    latitude: 1.5,
+                    longitude: 1.5
                 }
             }
         },

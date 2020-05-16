@@ -33,15 +33,28 @@
     import VueSlider from 'vue-slider-component'
     import ButtonAsText from './ButtonAsText'
     import 'vue-slider-component/theme/antd.css'
+    import GeoLocationProvider from '../utils/GeoLocationProvider'
     export default {
         name: "Settings",
         components: {
             VueSlider,
             ButtonAsText,
-            'p-radio': PrettyRadio
+            'p-radio': PrettyRadio,
         },
         props: {
             settings: Object
+        },
+        mounted: function () {
+            this.$nextTick(function () {
+                GeoLocationProvider
+                    .provide()
+                    .then(result => {
+                        console.log(result);
+                        this.settings.latitude = result[0];
+                        this.settings.longitude = result[1];
+                    });
+                
+            })
         }
     }
 </script>
@@ -72,7 +85,6 @@
     }
     
     .radio-button {
-        margin-left: 25px;
         display: grid;
         grid-template-columns: 1fr 3fr;
     }
