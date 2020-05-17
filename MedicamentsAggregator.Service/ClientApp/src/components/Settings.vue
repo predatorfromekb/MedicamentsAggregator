@@ -3,14 +3,14 @@
     <div class="settings">
         <div class="settings-element">
             <ButtonAsText text="Кол-во аптек"/>
-            <p-radio class="radio-button" color="info" v-model="settings.customPharmaciesCount" v-bind:value="false" name="pharmacies-count"><ButtonAsText text="Одна"/></p-radio>
-            <p-radio class="radio-button" v-model="settings.customPharmaciesCount" v-bind:value="true" name="pharmacies-count"><ButtonAsText text="Задать:"/></p-radio>
+            <p-radio class="radio-button" color="info" v-model="settings.limitedPharmaciesCount" v-bind:value="false" name="pharmacies-count"><ButtonAsText text="Любое"/></p-radio>
+            <p-radio class="radio-button" v-model="settings.limitedPharmaciesCount" v-bind:value="true" name="pharmacies-count"><ButtonAsText text="Задать:"/></p-radio>
             <div class="slider-wrap" >
-                <VueSlider class="slider" v-model="settings.pharmaciesCount" v-bind:min="2" :max="5" :interval="1"
+                <VueSlider class="slider" v-model="settings.pharmaciesCount" v-bind:min="1" :max="5" :interval="1"
                            :tooltip-formatter="'{value} шт.'"
-                           :processStyle="{backgroundColor: settings.customPharmaciesCount ? '#777' : '#eee'}"
+                           :processStyle="{backgroundColor: settings.limitedPharmaciesCount ? '#777' : '#eee'}"
                            :railStyle="{backgroundColor: '#eee'}"
-                           :dotStyle="{border: '2px solid #777'}" :disabled="!settings.customPharmaciesCount" />
+                           :dotStyle="{border: '2px solid #777'}" :disabled="!settings.limitedPharmaciesCount" />
             </div>
         </div>
         <div class="settings-element">

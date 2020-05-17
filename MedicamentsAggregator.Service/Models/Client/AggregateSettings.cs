@@ -13,8 +13,8 @@ namespace MedicamentsAggregator.Service.Models.Client
         [JsonProperty("pharmaciesCount")]
         public int PharmaciesCount { get; set; }
         
-        [JsonProperty("customPharmaciesCount")]
-        public bool CustomPharmaciesCount { get; set; }
+        [JsonProperty("limitedPharmaciesCount")]
+        public bool LimitedPharmaciesCount { get; set; }
         
         [JsonProperty("latitude")]
         public double Latitude { get; set; }
