@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace MedicamentsAggregator.Service.Models.Client
+namespace MedicamentsAggregator.Service.Models.Request
 {
-    public class ClientMedicamentModel
+    public class RequestMedicamentModel
     {
         [JsonProperty("id")]
         public int Id { get; set; }

@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace MedicamentsAggregator.Service.Models.Client
+namespace MedicamentsAggregator.Service.Models.Request
 {
-    public class AggregateSettings
+    public class RequestAggregateSettings
     {
         [JsonProperty("searchRadius")]
         public int SearchRadius { get; set; }

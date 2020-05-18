@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MedicamentsAggregator.Service.DataLayer;
+using MedicamentsAggregator.Service.DataLayer.Context;
 
 namespace MedicamentsAggregator.Service.Models.Common
 {

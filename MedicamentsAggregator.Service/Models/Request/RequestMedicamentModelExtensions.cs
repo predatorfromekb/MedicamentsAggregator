@@ -1,10 +1,10 @@
 ﻿using MedicamentsAggregator.Service.DataLayer.Tables;
 
-namespace MedicamentsAggregator.Service.Models.Client
+namespace MedicamentsAggregator.Service.Models.Request
 {
-    public static class ClientMedicamentModelExtensions
+    public static class RequestMedicamentModelExtensions
     {
-        public static Medicament ToMedicament(this ClientMedicamentModel model)
+        public static Medicament ToMedicament(this RequestMedicamentModel model)
         {
             return new Medicament
             {
