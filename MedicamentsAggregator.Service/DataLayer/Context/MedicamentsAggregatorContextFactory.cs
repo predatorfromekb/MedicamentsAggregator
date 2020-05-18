@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
-namespace MedicamentsAggregator.Service.DataLayer
+namespace MedicamentsAggregator.Service.DataLayer.Context
 {
     public class MedicamentsAggregatorContextFactory
     {

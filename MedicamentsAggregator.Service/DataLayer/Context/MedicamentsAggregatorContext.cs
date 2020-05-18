@@ -1,7 +1,7 @@
 ﻿using MedicamentsAggregator.Service.DataLayer.Tables;
 using Microsoft.EntityFrameworkCore;
 
-namespace MedicamentsAggregator.Service.DataLayer
+namespace MedicamentsAggregator.Service.DataLayer.Context
 {
     public class MedicamentsAggregatorContext : DbContext
     {

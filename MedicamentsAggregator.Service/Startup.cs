@@ -1,4 +1,5 @@
 using MedicamentsAggregator.Service.DataLayer;
+using MedicamentsAggregator.Service.DataLayer.Context;
 using MedicamentsAggregator.Service.Models.Aggregate;
 using MedicamentsAggregator.Service.Models.Common;
 using MedicamentsAggregator.Service.Models.GeoCoder;
@@ -40,11 +41,12 @@ namespace MedicamentsAggregator.Service
             services.AddSingleton<MedicamentsAggregatorContextFactory>();
             services.AddSingleton<Repository>();
             
-            services.AddScoped<MedicamentsAggregateProcessor>();
+            services.AddScoped<AggregateProcessor>();
             services.AddScoped<MedgorodokMedicamentPageParser>();
             services.AddSingleton<MedgorodokLog>();
             services.AddSingleton<GeoCoderLog>();
             services.AddScoped<PharmacyCoordinatesUpdater>();
+            services.AddScoped<Models.Aggregate.Aggregator>();
             
         }
 
