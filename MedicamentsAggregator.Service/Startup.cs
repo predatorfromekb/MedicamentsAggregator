@@ -1,4 +1,4 @@
-using MedicamentsAggregator.Service.DataLayer;
+
 using MedicamentsAggregator.Service.DataLayer.Context;
 using MedicamentsAggregator.Service.Models.Aggregate;
 using MedicamentsAggregator.Service.Models.Common;
@@ -46,14 +46,14 @@ namespace MedicamentsAggregator.Service
             services.AddSingleton<MedgorodokLog>();
             services.AddSingleton<GeoCoderLog>();
             services.AddScoped<PharmacyCoordinatesUpdater>();
-            services.AddScoped<Models.Aggregate.Aggregator>();
+            services.AddScoped<Aggregator>();
             
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, MedicamentsAggregatorContextFactory contextFactory)
         {
-            //ConnectionString.MedicamentsAggregator = Configuration.GetConnectionString("MedicamentsAggregator");
+            UpdateDatabase(contextFactory);
             loggerFactory.AddVostok(new ApplicationLog());
             if (env.IsDevelopment())
             {
@@ -88,6 +88,14 @@ namespace MedicamentsAggregator.Service
                     spa.UseVueCli();
                 }
             });
+        }
+
+        private void UpdateDatabase(MedicamentsAggregatorContextFactory contextFactory)
+        {
+            using (var context = contextFactory.CreateContext())
+            {
+                context.Database.Migrate();
+            }
         }
     }
 }
