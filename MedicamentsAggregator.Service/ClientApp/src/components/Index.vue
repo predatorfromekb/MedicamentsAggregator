@@ -1,5 +1,5 @@
 ﻿<template>
-    <main class="facade">
+    <main class="main">
         <section class="search-wrap">
             <Search v-bind:commonData="commonData"/>
         </section>
@@ -38,7 +38,7 @@
     
     
     export default {
-        name: "Facade",
+        name: "Index",
         components: {SelectedMedicament, Search, Settings, VueLoading },
         data: function () {
             return {
@@ -69,15 +69,19 @@
                     },
                     body: JSON.stringify({medicaments: medicaments, settings: this.settings})
                 })
-                    .then(() => this.isLoading = false);
+                    .then(e => e.json())
+                    .then(e => {
+                        this.isLoading = false;
+                        this.$router.push({name: "result", params: {aggregateResult: e}})
+                    });
             }
-        }
+        },
     }
     
 </script>
 
 <style scoped>
-    .facade {
+    .main {
         margin: auto; 
         width: 600px;
         height: 400px;

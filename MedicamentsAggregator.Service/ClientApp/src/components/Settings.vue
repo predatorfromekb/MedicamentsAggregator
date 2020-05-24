@@ -3,7 +3,7 @@
     <div class="settings">
         <div class="settings-element">
             <ButtonAsText text="Кол-во аптек"/>
-            <p-radio class="radio-button" color="info" v-model="settings.limitedPharmaciesCount" v-bind:value="false" name="pharmacies-count"><ButtonAsText text="Любое"/></p-radio>
+            <p-radio class="radio-button" v-model="settings.limitedPharmaciesCount" v-bind:value="false" name="pharmacies-count"><ButtonAsText text="Любое"/></p-radio>
             <p-radio class="radio-button" v-model="settings.limitedPharmaciesCount" v-bind:value="true" name="pharmacies-count"><ButtonAsText text="Задать:"/></p-radio>
             <div class="slider-wrap" >
                 <VueSlider class="slider" v-model="settings.pharmaciesCount" v-bind:min="1" :max="5" :interval="1"

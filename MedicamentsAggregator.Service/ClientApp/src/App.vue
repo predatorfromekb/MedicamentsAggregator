@@ -1,16 +1,13 @@
 <template>
   <div id="app">
-    <Facade />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Facade from "./components/Facade";
-
 export default {
   name: 'App',
   components: {
-    Facade,
   }
 }
 </script>
