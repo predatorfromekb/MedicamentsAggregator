@@ -36,7 +36,7 @@
         methods: {
             getSearchResults: function() {
                 const query = this.query.toLowerCase();
-                if (query.length < 5) {
+                if (query.length < 2) {
                     this.results = [];
                     return;
                 }
