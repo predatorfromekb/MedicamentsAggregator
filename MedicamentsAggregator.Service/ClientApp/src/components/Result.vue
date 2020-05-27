@@ -13,7 +13,13 @@
                          :key="pharmacy.id" 
                          :marker-id="pharmacy.id" 
                          :coords="[pharmacy.latitude,pharmacy.longitude]"
-                         :balloon="{header: pharmacy.title, body: pharmacy.address, footer: pharmacy.medicaments.map(e => e.title).join('\r\n')}"
+                         :balloon="{
+                            header: pharmacy.title, 
+                            body: pharmacy.address, 
+                            footer: pharmacy.medicaments
+                                .map(e => '<strong>[' +e.price + ']</strong> ' + e.title + '<br>').join('') 
+                                + `<strong>[Всего - ${pharmacy.medicaments.map(p => p.price).reduce((z,u) => z+u, 0)}]</strong>`
+                            }"
             />
         </yandex-map>
         
