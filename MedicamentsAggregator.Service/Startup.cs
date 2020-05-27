@@ -1,4 +1,5 @@
 
+using System;
 using MedicamentsAggregator.Service.DataLayer.Context;
 using MedicamentsAggregator.Service.Models.Aggregate;
 using MedicamentsAggregator.Service.Models.Common;
@@ -36,7 +37,7 @@ namespace MedicamentsAggregator.Service
             services.AddHttpClient();
             services.AddDbContext<MedicamentsAggregatorContext>(options =>
                 options
-                    .UseNpgsql(Configuration.GetConnectionString("MedicamentsAggregator"))
+                    .UseNpgsql(Environment.GetEnvironmentVariable("ASPNETCORE_ConnectionStrings__MedicamentsAggregator"))
                     .UseLoggerFactory(EntityFrameworkLoggerFactory.Singleton));
             services.AddSingleton<MedicamentsAggregatorContextFactory>();
             services.AddSingleton<Repository>();

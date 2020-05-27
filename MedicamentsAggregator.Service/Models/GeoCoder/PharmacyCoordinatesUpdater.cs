@@ -50,7 +50,7 @@ namespace MedicamentsAggregator.Service.Models.GeoCoder
         {
             var query = YekaterinburgRegionPrefix + pharmacy.City + ", " + pharmacy.Address;
             var request = new GeocoderRequest { Request = query };
-            var apiKey = _configuration["GeoCoderApiKey"];
+            var apiKey = Environment.GetEnvironmentVariable("ASPNETCORE_GeoCoderApiKey");
             var client = new GeocoderClient(apiKey);
             var response = await client.Geocode(request);
 
