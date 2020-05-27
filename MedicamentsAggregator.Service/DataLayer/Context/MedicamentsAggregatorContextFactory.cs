@@ -1,5 +1,4 @@
-﻿using System;
-using MedicamentsAggregator.Service.Models.Logs;
+﻿using MedicamentsAggregator.Service.Models.Logs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
@@ -19,7 +18,7 @@ namespace MedicamentsAggregator.Service.DataLayer.Context
         {
             return new MedicamentsAggregatorContext(
                 new DbContextOptionsBuilder<MedicamentsAggregatorContext>()
-                    .UseNpgsql(Environment.GetEnvironmentVariable("ASPNETCORE_ConnectionStrings__MedicamentsAggregator"))
+                    .UseNpgsql(_configuration.GetConnectionString("MedicamentsAggregator"))
                     .UseLoggerFactory(EntityFrameworkLoggerFactory.Singleton)
                 .Options);
         }
