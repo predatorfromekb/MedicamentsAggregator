@@ -48,14 +48,14 @@
             },
             settings: {
                 type: Object,
-                default: {
+                default: () => ({
                     searchRadius : 1000,
                     useSearchRadius : false,
                     pharmaciesCount : 3,
                     limitedPharmaciesCount: false,
                     latitude: 1.5,
                     longitude: 1.5
-                }
+                })
             }
         },
         data: function () {
