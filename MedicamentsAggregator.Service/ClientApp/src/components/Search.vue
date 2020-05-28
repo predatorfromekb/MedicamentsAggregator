@@ -2,7 +2,7 @@
     <div>
         <div class="search-input-wrap">
             <input
-                    placeholder="Поиск"
+                    placeholder="Поиск лекарств"
                     class="search"
                     autocomplete="false"
                     autofocus
@@ -12,7 +12,8 @@
         </div>
         <SearchResultList v-if="query"
                 v-bind:results="results" 
-                v-bind:commonData="commonData"
+                v-bind:forceUpdate="forceUpdate"
+                v-bind:selectedMedicaments="selectedMedicaments"
                 v-bind:clearInput="clearInput.bind(this)" />
     </div>
 </template>
@@ -24,7 +25,8 @@
         name: "Search",
         components: {SearchResultList},
         props: {
-            commonData: Object
+            forceUpdate: Function,
+            selectedMedicaments: Map
         },
         data: function () {
             return {

@@ -8,7 +8,7 @@ Vue.config.productionTip = false;
 Vue.config.devtools = true;
 
 const routes = [
-  { path: '/', component: Index},
+  { path: '/', name:"index", component: Index, props: true},
   { path: '/result', name:"result", component: Result, props: true}
 ];
 

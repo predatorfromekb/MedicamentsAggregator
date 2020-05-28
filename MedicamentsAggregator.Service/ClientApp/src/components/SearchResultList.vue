@@ -1,13 +1,15 @@
 ﻿<template>
     <ul class="search-results">
         <SearchResult 
-                v-for="{DrugID, DrugName, url} in results
-                    .filter(e => !commonData.selectedMedicaments.has(parseInt(e.DrugID)))" 
+                v-for="{DrugID, DrugName, url, Enterprises} in results
+                    .filter(e => !selectedMedicaments.has(parseInt(e.DrugID)))" 
                 v-bind:key="DrugID" 
                 :title="DrugName" 
                 :url="url"
                 :id="DrugID"
-                :commonData="commonData"
+                :pharmaciesCount="Enterprises"
+                :forceUpdate="forceUpdate"
+                :selectedMedicaments="selectedMedicaments"
                 v-bind:clearInput="clearInput"
         />
     </ul>
@@ -20,7 +22,8 @@
         components: {SearchResult},
         props: {
             results: Array,
-            commonData: Object,
+            forceUpdate: Function,
+            selectedMedicaments: Map,
             clearInput: Function
         }
     }

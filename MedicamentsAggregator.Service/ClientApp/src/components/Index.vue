@@ -1,21 +1,22 @@
 ﻿<template>
     <main class="main">
         <section class="search-wrap">
-            <Search v-bind:commonData="commonData"/>
+            <Search v-bind:forceUpdate="forceUpdate" v-bind:selectedMedicaments="selectedMedicaments"/>
         </section>
         
         <div class="controls">
             <Settings v-bind:settings="settings"/>
             
-            <button class="search-btn" v-on:click="sendMedicaments" :disabled="commonData.selectedMedicaments.size === 0">Искать</button>
+            <button class="search-btn" v-on:click="sendMedicaments" :disabled="selectedMedicaments.size === 0">Искать</button>
         </div>
         
 
         <div class="selected-medicament-list-wrap">
             <SelectedMedicament
-                    v-for="[key,value] in commonData.selectedMedicaments"
+                    v-for="[key,value] in selectedMedicaments"
                     v-bind:key="key"
                     :medicament="value"
+                    :deleteMedicament="() => deleteMedicament(key)"
             />
         </div>
 
@@ -40,14 +41,14 @@
     export default {
         name: "Index",
         components: {SelectedMedicament, Search, Settings, VueLoading },
-        data: function () {
-            return {
-                isLoading : false,
-                commonData: {
-                    forceUpdate: this.$forceUpdate.bind(this),
-                    selectedMedicaments: new Map()
-                },
-                settings: {
+        props: {
+            selectedMedicaments: {
+                type: Map,
+                default: () => new Map()
+            },
+            settings: {
+                type: Object,
+                default: {
                     searchRadius : 1000,
                     useSearchRadius : false,
                     pharmaciesCount : 3,
@@ -57,9 +58,15 @@
                 }
             }
         },
+        data: function () {
+            return {
+                isLoading : false,
+                forceUpdate: this.$forceUpdate.bind(this),
+            }
+        },
         methods: {
             sendMedicaments: function () {
-                const medicaments = Array.from(this.commonData.selectedMedicaments.values());
+                const medicaments = Array.from(this.selectedMedicaments.values());
                 console.log(medicaments);
                 this.isLoading = true;
                 fetch('/api/aggregate', {
@@ -72,9 +79,13 @@
                     .then(e => e.json())
                     .then(e => {
                         this.isLoading = false;
-                        this.$router.push({name: "result", params: {aggregateResult: e}})
+                        this.$router.push({name: "result", params: {aggregateResult: e, selectedMedicaments: this.selectedMedicaments, settings: this.settings}})
                     });
-            }
+            },
+            deleteMedicament : function (key) {
+                this.selectedMedicaments.delete(key);
+                this.$forceUpdate();
+            },
         },
     }
     

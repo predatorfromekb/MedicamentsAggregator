@@ -1,6 +1,6 @@
 ﻿<template>
     <main class="main">
-        <router-link to="/" class="back-to-index"><button class="back-to-index-btn">На главную</button></router-link>
+        <router-link :to="{ name: 'index', params: {selectedMedicaments: this.selectedMedicaments, settings: this.settings } }" class="back-to-index"><button class="back-to-index-btn">На главную</button></router-link>
         <yandex-map :show-all-markers="aggregateResult.pharmacies.length > 1" 
                     style="height: 100%" 
                     :controls="[]" 
@@ -42,7 +42,9 @@
             }
         },
         props: {
-            aggregateResult: Object
+            aggregateResult: Object,
+            selectedMedicaments: Map,
+            settings: Object
         }
     }
 </script>

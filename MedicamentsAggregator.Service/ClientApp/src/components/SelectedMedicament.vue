@@ -2,11 +2,8 @@
     <section class="selected-medicament">
         <span class="selected-medicament__title">{{medicament.title}}</span>
         <div class="selected-medicament__button-list">
-            <button v-on:click="incrementCount" v-if="count < 9">➕</button>
-            <button v-on:click="incrementCount" v-else disabled>➕</button>
-            <button v-on:click="decrementCount" v-if="count > 1">➖</button>
-            <button v-on:click="decrementCount" v-else disabled>➖</button>
-            <span class="selected-medicament__count">{{count}}</span>
+            <input type="number" class="selected-medicament__count" v-model="countValue" v-on:keyup="onkeyup"/>
+            <button v-on:click="deleteMedicament">❌</button>
         </div>
     </section>
 </template>
@@ -15,22 +12,18 @@
     export default {
         name: "SelectedMedicament",
         props: {
+            deleteMedicament: Function,
             medicament: Object
         },
         data : function () {
             return {
-                count: this.medicament.count
+                countValue: this.medicament.count
             }
         },
         methods: {
-            incrementCount : function () {
-                this.count ++; /* Для локальной отрисовки */
-                this.medicament.count ++; /* Для реального изменения количества */
+            onkeyup: function() {
+                this.medicament.count = parseInt(this.countValue);
             },
-            decrementCount : function () {
-                this.count --; /* Для локальной отрисовки */
-                this.medicament.count --; /* Для реального изменения количества */
-            }
         }
     }
 </script>
@@ -53,17 +46,14 @@
 
     .selected-medicament__count {
         text-align: center;
-        border: 1px solid #cccccc;
         grid-column: span 1;
         width: 100%;
-        -webkit-appearance: none;
-        background-color: #eeeeee;
     }
 
     .selected-medicament__button-list {
         grid-column: span 1;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         grid-column-gap: 5px;
     }
     
