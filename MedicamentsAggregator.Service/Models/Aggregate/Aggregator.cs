@@ -41,7 +41,12 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
                 }
                 pharmaciesList[cheapestLink.PharmacyId].Medicaments.Add(new ResponseMedicamentModel(cheapestLink.MedicamentId, medicament.Title, cheapestLink.Price));
             }
-            return new ResponseAggregateModel(pharmaciesList.Values.ToList());
+
+            var coordinates = pharmaciesList.Values
+                .GroupBy(e => (e.Latitude, e.Longitude, e.Address),
+                    (e, i) => new ResponseCoordinateModel(i.ToList(), e.Latitude, e.Longitude, e.Address))
+                .ToList();
+            return new ResponseAggregateModel(coordinates);
         }
 
         private PharmacyMedicamentLink[] GetData(RequestAggregateModel requestAggregateModel)

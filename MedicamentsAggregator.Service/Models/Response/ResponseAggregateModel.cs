@@ -5,15 +5,12 @@ namespace MedicamentsAggregator.Service.Models.Response
 {
     public class ResponseAggregateModel
     {
-        public ResponseAggregateModel(List<ResponsePharmacyModel> pharmacies)
+        public ResponseAggregateModel(List<ResponseCoordinateModel> coordinates)
         {
-            Pharmacies = pharmacies;
+            Coordinates = coordinates;
         }
 
-        [JsonProperty("pharmacies")]
-        public List<ResponsePharmacyModel> Pharmacies { get; }
-
-        [JsonProperty("count")] 
-        public int Count => Pharmacies.Count;
+        [JsonProperty("coordinates")]
+        public List<ResponseCoordinateModel> Coordinates { get; }
     }
 }

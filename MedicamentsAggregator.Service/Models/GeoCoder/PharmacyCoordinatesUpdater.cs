@@ -79,7 +79,7 @@ namespace MedicamentsAggregator.Service.Models.GeoCoder
             var coordinate = geoObject.GeoObject.Point.Pos;
             var formattedAddress = geoObject.GeoObject.MetaDataProperty.GeocoderMetaData.Address.Formatted;
 
-            pharmacy.FormattedAddress = formattedAddress;
+            pharmacy.FormattedAddress = formattedAddress.Replace("Россия, Свердловская область, ", string.Empty);
 
             try
             {

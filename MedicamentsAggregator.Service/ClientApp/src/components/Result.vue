@@ -1,28 +1,27 @@
 ﻿<template>
     <main class="main">
-        <router-link :to="{ name: 'index', params: {selectedMedicaments: this.selectedMedicaments, settings: this.settings } }" class="back-to-index"><button class="back-to-index-btn">На главную</button></router-link>
-        <yandex-map :show-all-markers="aggregateResult.pharmacies.length > 1" 
-                    style="height: 100%" 
-                    :controls="[]" 
-                    :zoom="16" 
-                    :scrollZoom="true" 
-                    :coords="aggregateResult.pharmacies.length === 1 ? [aggregateResult.pharmacies[0].latitude, aggregateResult.pharmacies[0].longitude] : coords" 
-                    :settings="mapSettings" 
+        <router-link :to="{ name: 'index', params: {selectedMedicaments: this.selectedMedicaments, settings: this.settings } }" class="back-to-index ">
+            <button class="back-to-index-btn">На главную</button>
+        </router-link>
+        <yandex-map :show-all-markers="aggregateResult.coordinates.length > 1"
+                    style="height: 100%"
+                    :controls="[]"
+                    :zoom="16"
+                    :scrollZoom="true"
+                    :coords="aggregateResult.coordinates.length === 1 ? [aggregateResult.coordinates[0].latitude, aggregateResult.coordinates[0].longitude] : coords"
+                    :settings="mapSettings"
         >
-            <ymap-marker v-for="pharmacy in aggregateResult.pharmacies" 
-                         :key="pharmacy.id" 
-                         :marker-id="pharmacy.id" 
-                         :coords="[pharmacy.latitude,pharmacy.longitude]"
+            <ymap-marker v-for="(coordinate, index) in aggregateResult.coordinates"
+                         :key="index"
+                         :marker-id="index"
+                         :coords="[coordinate.latitude,coordinate.longitude]"
                          :balloon="{
-                            header: pharmacy.title, 
-                            body: pharmacy.address, 
-                            footer: pharmacy.medicaments
-                                .map(e => '<strong>[' +e.price + ']</strong> ' + e.title + '<br>').join('') 
-                                + `<strong>[Всего - ${pharmacy.medicaments.map(p => p.price).reduce((z,u) => z+u, 0)}]</strong>`
-                            }"
+                                header: coordinate.address, 
+                                body: renderPharmacies(coordinate.pharmacies)
+                             }"
+
             />
         </yandex-map>
-        
     </main>
 </template>
 
@@ -33,7 +32,7 @@
         name: "Result",
         components: {
             'yandex-map': yandexMap,
-            'ymap-marker': ymapMarker
+            'ymap-marker': ymapMarker,
         },
         data: function() {
             return {
@@ -45,6 +44,22 @@
             aggregateResult: Object,
             selectedMedicaments: Map,
             settings: Object
+        },
+        methods: {
+            renderPharmacies: function (pharmacies) {
+                return pharmacies.reduce((p,pharmacy) => 
+                    p + '<div style="margin: 5px; border-top: 1px #dddddd dotted">'
+                    +'<div><strong>' + pharmacy.title + '</strong></div>' 
+                    + pharmacy.medicaments.reduce((r,medicament)  => 
+                        r + '<div style="margin: 5px">' 
+                        + '<strong>'+ medicament.price + ' руб.</strong> '
+                        + medicament.title 
+                        + '</div>',
+                    '') 
+                    + '<div><strong>Итого - '+ Math.round((pharmacy.medicaments.map(e => e.price).reduce((c,a) => c + a, 0))*10)/10 +' руб</strong></div>'
+                    + '</div>',
+                '');
+            }
         }
     }
 </script>
@@ -54,10 +69,6 @@
         margin: auto;
         width: 800px;
         height: 600px;
-        /*display: grid;*/
-        /*grid-template-rows: 50px 50px 300px;*/
-        /*grid-template-columns: 1fr;*/
-        /*grid-row-gap: 5px;*/
     }
     .back-to-index {
         position: absolute;
