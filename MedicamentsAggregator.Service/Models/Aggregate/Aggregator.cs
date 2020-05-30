@@ -24,6 +24,7 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
         {
             var data = GetData(requestAggregateModel);
             var pharmaciesList = new Dictionary<int, ResponsePharmacyModel>();
+            double totalPrice = 0;
             foreach (var medicament in requestAggregateModel.Medicaments)
             {
                 var cheapestLink = data
@@ -40,13 +41,14 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
                     pharmaciesList.Add(cheapestLink.PharmacyId, model);
                 }
                 pharmaciesList[cheapestLink.PharmacyId].Medicaments.Add(new ResponseMedicamentModel(cheapestLink.MedicamentId, medicament.Title, cheapestLink.Price, medicament.Count));
+                totalPrice += cheapestLink.Price * medicament.Count;
             }
 
             var coordinates = pharmaciesList.Values
                 .GroupBy(e => (e.Latitude, e.Longitude, e.Address),
                     (e, i) => new ResponseCoordinateModel(i.ToList(), e.Latitude, e.Longitude, e.Address))
                 .ToList();
-            return new ResponseAggregateModel(coordinates);
+            return new ResponseAggregateModel(coordinates, totalPrice);
         }
 
         private PharmacyMedicamentLink[] GetData(RequestAggregateModel requestAggregateModel)

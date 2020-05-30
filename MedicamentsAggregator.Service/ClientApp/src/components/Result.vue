@@ -1,8 +1,15 @@
 ﻿<template>
     <main class="main">
-        <router-link :to="{ name: 'index', params: {selectedMedicaments: this.selectedMedicaments, settings: this.settings } }" class="back-to-index ">
-            <button class="back-to-index-btn">На главную</button>
-        </router-link>
+        
+        <div class="info" >
+            <router-link :to="{ name: 'index', params: {selectedMedicaments: this.selectedMedicaments, settings: this.settings } }" class="back-to-index ">
+                <h3>На главную</h3>
+            </router-link>
+            <h2>Всего - {{Math.round(aggregateResult.totalPrice*10)/10}}</h2>
+            <div v-html="aggregateResult.coordinates.reduce((i,e) => i + renderPharmacies(e.pharmacies), '')">
+                
+            </div>
+        </div>
         <yandex-map :show-all-markers="aggregateResult.coordinates.length > 1"
                     style="height: 100%"
                     :controls="[]"
@@ -69,9 +76,16 @@
         margin: auto;
         width: 800px;
         height: 600px;
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+    .info {
+        max-height: 600px;
+        font-family: Consolas,serif;
+        font-size: 10px;
+        overflow: scroll;
     }
     .back-to-index {
-        position: absolute;
         z-index: 15001;
     }
     .back-to-index-btn {
