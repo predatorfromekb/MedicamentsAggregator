@@ -52,11 +52,11 @@
                     +'<div><strong>' + pharmacy.title + '</strong></div>' 
                     + pharmacy.medicaments.reduce((r,medicament)  => 
                         r + '<div style="margin: 5px">' 
-                        + '<strong>'+ medicament.price + ' руб.</strong> '
+                        + '<strong>'+ medicament.count + ' x '+ medicament.price + ' руб.</strong> '
                         + medicament.title 
                         + '</div>',
                     '') 
-                    + '<div><strong>Итого - '+ Math.round((pharmacy.medicaments.map(e => e.price).reduce((c,a) => c + a, 0))*10)/10 +' руб</strong></div>'
+                    + '<div><strong>Итого - '+ Math.round((pharmacy.medicaments.map(e => e.price*e.count).reduce((c,a) => c + a, 0))*10)/10 +' руб</strong></div>'
                     + '</div>',
                 '');
             }

@@ -4,11 +4,12 @@ namespace MedicamentsAggregator.Service.Models.Response
 {
     public class ResponseMedicamentModel
     {
-        public ResponseMedicamentModel(int id, string title, double price)
+        public ResponseMedicamentModel(int id, string title, double price, int count)
         {
             Id = id;
             Title = title;
             Price = price;
+            Count = count;
         }
 
         [JsonProperty("id")]
@@ -19,5 +20,8 @@ namespace MedicamentsAggregator.Service.Models.Response
 
         [JsonProperty("price")]
         public double Price { get; }
+        
+        [JsonProperty("count")]
+        public int Count { get; }
     }
 }

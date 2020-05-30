@@ -39,7 +39,7 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
                         pharmacy.Latitude.Value, pharmacy.Longitude.Value, new List<ResponseMedicamentModel>());
                     pharmaciesList.Add(cheapestLink.PharmacyId, model);
                 }
-                pharmaciesList[cheapestLink.PharmacyId].Medicaments.Add(new ResponseMedicamentModel(cheapestLink.MedicamentId, medicament.Title, cheapestLink.Price));
+                pharmaciesList[cheapestLink.PharmacyId].Medicaments.Add(new ResponseMedicamentModel(cheapestLink.MedicamentId, medicament.Title, cheapestLink.Price, medicament.Count));
             }
 
             var coordinates = pharmaciesList.Values

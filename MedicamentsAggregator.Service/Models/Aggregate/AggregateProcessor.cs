@@ -39,8 +39,6 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
         public async Task<ResponseAggregateModel> Process(RequestAggregateModel requestAggregateModel)
         {
             // Надо
-            var countById = requestAggregateModel.Medicaments
-                .ToDictionary(e => e.Id, e => e.Count);
             var medicamentsFromClient = requestAggregateModel.Medicaments.ToArray();
 
             await UpdateData(medicamentsFromClient);
