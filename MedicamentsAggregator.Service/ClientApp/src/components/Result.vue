@@ -37,7 +37,7 @@
         data: function() {
             return {
                 mapSettings: GeoLocationProvider.getSettings(),
-                coords: GeoLocationProvider.getCoords().split(',').map(parseFloat),
+                coords: GeoLocationProvider.getCoords(true).split(',').map(parseFloat),
             }
         },
         props: {

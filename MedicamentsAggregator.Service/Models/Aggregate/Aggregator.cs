@@ -61,6 +61,7 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
                     .Where(e => e.Pharmacy.Latitude != null && e.Pharmacy.Longitude != null)
                     .Include(e => e.Medicament)
                     .FilterByRange(requestAggregateModel.Settings)
+                    .Where(e => !(e.Pharmacy.Latitude == 56.838011 && e.Pharmacy.Longitude == 60.597465))
                     .ToArray();
             }
         }

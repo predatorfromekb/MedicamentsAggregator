@@ -3,7 +3,7 @@ const key = 'user_coords';
 
 export default class GeoLocationProvider {
     static provide() {
-        const value = this.getCoords();
+        const value = this.getCoords(false);
         if (value != null) {
             const splitValue = value.split(',').map(parseFloat);
             return Promise.resolve(splitValue)
@@ -21,11 +21,17 @@ export default class GeoLocationProvider {
                     window.localStorage[key] = userCoordinates;
                     return userCoordinates;
                 })
-            .catch(() => [56.838011, 60.597465]);
+            .catch(() => this.getDefaultCoords());
     }
     
-    static getCoords() {
-        return window.localStorage[key];
+    static getCoords(returnDefault) {
+        const value = window.localStorage[key];
+        if (!returnDefault || value) return value;
+        return this.getDefaultCoords().toString();
+    }
+    
+    static getDefaultCoords() {
+        return [56.838011, 60.597465];
     }
     
     static getSettings() {
