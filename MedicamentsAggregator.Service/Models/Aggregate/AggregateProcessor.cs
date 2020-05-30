@@ -5,6 +5,7 @@ using MedicamentsAggregator.Service.DataLayer;
 using MedicamentsAggregator.Service.DataLayer.Context;
 using MedicamentsAggregator.Service.DataLayer.Tables;
 using MedicamentsAggregator.Service.Models.Common;
+using MedicamentsAggregator.Service.Models.Extensions;
 using MedicamentsAggregator.Service.Models.GeoCoder;
 using MedicamentsAggregator.Service.Models.Medgorodok;
 using MedicamentsAggregator.Service.Models.Request;
@@ -70,7 +71,10 @@ namespace MedicamentsAggregator.Service.Models.Aggregate
 
         private async Task<EntityContainer<Pharmacy>> UpdatePharmacies(MedgorodokMedicamentModel[] models)
         {
-            var pharmacies = UnionPharmacies(models);
+            var pharmacies = UnionPharmacies(models)
+                .Select(e => e.TryGetCityFromTitle())
+                .Select(e => e.RemoveBracketsFromTitle())
+                .ToArray();
             return await _repository.AddOrUpdate(pharmacies, UpdatingRules.ForPharmacy);
         }
 

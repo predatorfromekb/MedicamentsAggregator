@@ -49,7 +49,6 @@
                 GeoLocationProvider
                     .provide()
                     .then(result => {
-                        console.log(result);
                         this.settings.latitude = result[0];
                         this.settings.longitude = result[1];
                     });
@@ -93,6 +92,6 @@
 </style>
 <style>
     .radio-button > input {
-        margin: 5px;
+        margin: 6px;
     }
 </style>

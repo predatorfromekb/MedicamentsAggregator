@@ -19,7 +19,6 @@ export default class GeoLocationProvider {
                     // Получение местоположения пользователя.
                     const userCoordinates = result.geoObjects.get(0).geometry.getCoordinates();
                     window.localStorage[key] = userCoordinates;
-                    console.log(userCoordinates);
                     return userCoordinates;
                 })
             .catch(() => [56.838011, 60.597465]);

@@ -67,7 +67,6 @@
         methods: {
             sendMedicaments: function () {
                 const medicaments = Array.from(this.selectedMedicaments.values());
-                console.log(medicaments);
                 this.isLoading = true;
                 fetch('/api/aggregate', {
                     method: 'POST',
